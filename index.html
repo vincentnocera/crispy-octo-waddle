@@ -219,6 +219,72 @@
             font-size: 0.9rem;
         }
         
+        /* Authentication overlay */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .auth-container {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+        }
+        
+        .auth-container h1 {
+            color: var(--primary);
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+        
+        .auth-form {
+            margin-top: 1.5rem;
+        }
+        
+        .auth-input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        
+        .auth-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+        }
+        
+        .auth-error {
+            color: var(--accent);
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .content-container {
+            display: none;
+        }
+        
         /* Adjust for larger screens */
         @media (min-width: 768px) {
             .container {
@@ -241,358 +307,411 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="title">No-Equipment Glute Workout Guide</h1>
-        
-        <div class="nav-pills">
-            <button class="nav-pill" onclick="openExercise(0)">Hip Thrust</button>
-            <button class="nav-pill" onclick="openExercise(1)">Banded RDL</button>
-            <button class="nav-pill" onclick="openExercise(2)">Split Squat</button>
-            <button class="nav-pill" onclick="openExercise(3)">Hip Abduction</button>
-        </div>
-        
-        <!-- Exercise 1 -->
-        <div class="exercise" id="exercise-1">
-            <div class="exercise-header" onclick="toggleExercise(this.parentNode)">
-                <h2>1. Banded Hip Thrust</h2>
-                <span class="arrow">▼</span>
-            </div>
-            <div class="exercise-content">
-                <div class="section">
-                    <h3>Primary Muscles</h3>
-                    <p><span class="primary-muscles">Gluteus Maximus</span> (main part of the butt)</p>
-                </div>
-                
-                <div class="section">
-                    <h3>Equipment</h3>
-                    <ul>
-                        <li>Loop resistance bands</li>
-                        <li>Sturdy bench/sofa/chair</li>
-                    </ul>
-                </div>
-                
-                <div class="section">
-                    <h3>Setup</h3>
-                    <ul>
-                        <li>Sit on floor with upper back against bench/sofa edge</li>
-                        <li>Place resistance band across hips and secure under your shoulders or anchor to something sturdy</li>
-                        <li>Plant feet flat, shoulder-width apart</li>
-                        <li><em>Optional:</em> Place second loop band above knees for more glute activation</li>
-                    </ul>
-                </div>
-                
-                <div class="section">
-                    <h3>Execution</h3>
-                    <div class="execution-step" data-number="1">
-                        Tuck chin, brace core
-                    </div>
-                    <div class="execution-step" data-number="2">
-                        <strong>Drive through heels</strong> to lift hips up against band resistance
-                    </div>
-                    <div class="execution-step" data-number="3">
-                        Lift until body forms straight line from shoulders to knees
-                    </div>
-                    <div class="execution-step" data-number="4">
-                        <strong>Squeeze glutes hard</strong> at top for 1-2 seconds
-                    </div>
-                    <div class="execution-step" data-number="5">
-                        Lower hips down under control
-                    </div>
-                    <div class="execution-step" data-number="6">
-                        Repeat. Exhale up, inhale down
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <h3>Key Form Cues</h3>
-                    <div class="do-dont">
-                        <div class="do">
-                            <h4>DO</h4>
-                            <ul>
-                                <li>Drive through heels</li>
-                                <li>Keep chin tucked</li>
-                                <li>Squeeze glutes HARD at top</li>
-                                <li>Control descent</li>
-                                <li>Keep knees tracking over feet</li>
-                            </ul>
-                        </div>
-                        <div class="dont">
-                            <h4>DON'T</h4>
-                            <ul>
-                                <li>Push through toes</li>
-                                <li>Arch lower back</li>
-                                <li>Look up at ceiling</li>
-                                <li>Let knees cave inward</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="feel-it">
-                    <h4>Feel It</h4>
-                    <p>Intense contraction in glutes at top. If using knee band, also in outer glutes.</p>
-                </div>
+    <!-- Authentication Overlay -->
+    <div class="auth-overlay" id="auth-overlay">
+        <div class="auth-container">
+            <h1>Workout Access</h1>
+            <p>Please enter the access code to view the workout guide</p>
+            <div class="auth-form">
+                <input type="password" id="access-code" class="auth-input" placeholder="Enter access code">
+                <button class="auth-button" id="submit-code">Access Workout</button>
+                <p class="auth-error" id="auth-error">Incorrect access code. Please try again.</p>
             </div>
         </div>
-        
-        <!-- Exercise 2 -->
-        <div class="exercise" id="exercise-2">
-            <div class="exercise-header" onclick="toggleExercise(this.parentNode)">
-                <h2>2. Banded Romanian Deadlift (RDL)</h2>
-                <span class="arrow">▼</span>
+    </div>
+
+    <!-- Content (hidden until authenticated) -->
+    <div class="content-container" id="content-container">
+        <div class="container">
+            <h1 class="title">No-Equipment Glute Workout Guide</h1>
+            
+            <div class="nav-pills">
+                <button class="nav-pill" onclick="openExercise(0)">Hip Thrust</button>
+                <button class="nav-pill" onclick="openExercise(1)">Banded RDL</button>
+                <button class="nav-pill" onclick="openExercise(2)">Split Squat</button>
+                <button class="nav-pill" onclick="openExercise(3)">Hip Abduction</button>
             </div>
-            <div class="exercise-content">
-                <div class="section">
-                    <h3>Primary Muscles</h3>
-                    <p><span class="primary-muscles">Hamstrings and Glutes</span></p>
+            
+            <!-- Exercise 1 -->
+            <div class="exercise" id="exercise-1">
+                <div class="exercise-header" onclick="toggleExercise(this.parentNode)">
+                    <h2>1. Banded Hip Thrust</h2>
+                    <span class="arrow">▼</span>
                 </div>
-                
-                <div class="section">
-                    <h3>Equipment</h3>
-                    <ul>
-                        <li>Loop resistance band</li>
-                    </ul>
-                </div>
-                
-                <div class="section">
-                    <h3>Setup</h3>
-                    <ul>
-                        <li>Stand with feet hip-width apart on middle of resistance band</li>
-                        <li>Hold the ends of the band in each hand</li>
-                        <li>Stand tall, chest up, shoulders back</li>
-                        <li>Slight bend in knees - <strong>maintain this bend throughout</strong></li>
-                    </ul>
-                </div>
-                
-                <div class="section">
-                    <h3>Execution</h3>
-                    <div class="execution-step" data-number="1">
-                        <strong>Push hips back</strong> (hinge, don't squat)
+                <div class="exercise-content">
+                    <div class="section">
+                        <h3>Primary Muscles</h3>
+                        <p><span class="primary-muscles">Gluteus Maximus</span> (main part of the butt)</p>
                     </div>
-                    <div class="execution-step" data-number="2">
-                        Let hands lower straight down, keeping tension on the band
+                    
+                    <div class="section">
+                        <h3>Equipment</h3>
+                        <ul>
+                            <li>Loop resistance bands</li>
+                            <li>Sturdy bench/sofa/chair</li>
+                        </ul>
                     </div>
-                    <div class="execution-step" data-number="3">
-                        Keep back flat the entire time
+                    
+                    <div class="section">
+                        <h3>Setup</h3>
+                        <ul>
+                            <li>Sit on floor with upper back against bench/sofa edge</li>
+                            <li>Place resistance band across hips and secure under your shoulders or anchor to something sturdy</li>
+                            <li>Plant feet flat, shoulder-width apart</li>
+                            <li><em>Optional:</em> Place second loop band above knees for more glute activation</li>
+                        </ul>
                     </div>
-                    <div class="execution-step" data-number="4">
-                        Lower until you feel hamstring stretch
-                    </div>
-                    <div class="execution-step" data-number="5">
-                        <strong>Drive hips forward</strong> to stand up against band resistance
-                    </div>
-                    <div class="execution-step" data-number="6">
-                        <strong>Squeeze glutes</strong> at the top
-                    </div>
-                    <div class="execution-step" data-number="7">
-                        Repeat. Inhale down, exhale up
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <h3>Key Form Cues</h3>
-                    <div class="do-dont">
-                        <div class="do">
-                            <h4>DO</h4>
-                            <ul>
-                                <li>Hinge at hips</li>
-                                <li>Keep back flat</li>
-                                <li>Keep hands close to legs</li>
-                                <li>Feel hamstring stretch</li>
-                                <li>Drive hips forward</li>
-                                <li>Maintain soft knees</li>
-                            </ul>
+                    
+                    <div class="section">
+                        <h3>Execution</h3>
+                        <div class="execution-step" data-number="1">
+                            Tuck chin, brace core
                         </div>
-                        <div class="dont">
-                            <h4>DON'T</h4>
-                            <ul>
-                                <li>Round lower back</li>
-                                <li>Let hands drift forward</li>
-                                <li>Squat by bending knees more</li>
-                                <li>Lose tension in the band</li>
-                            </ul>
+                        <div class="execution-step" data-number="2">
+                            <strong>Drive through heels</strong> to lift hips up against band resistance
+                        </div>
+                        <div class="execution-step" data-number="3">
+                            Lift until body forms straight line from shoulders to knees
+                        </div>
+                        <div class="execution-step" data-number="4">
+                            <strong>Squeeze glutes hard</strong> at top for 1-2 seconds
+                        </div>
+                        <div class="execution-step" data-number="5">
+                            Lower hips down under control
+                        </div>
+                        <div class="execution-step" data-number="6">
+                            Repeat. Exhale up, inhale down
                         </div>
                     </div>
-                </div>
-                
-                <div class="feel-it">
-                    <h4>Feel It</h4>
-                    <p>Hamstring stretch going down, strong hamstrings and glutes coming up</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Exercise 3 -->
-        <div class="exercise" id="exercise-3">
-            <div class="exercise-header" onclick="toggleExercise(this.parentNode)">
-                <h2>3. Bodyweight Bulgarian Split Squat</h2>
-                <span class="arrow">▼</span>
-            </div>
-            <div class="exercise-content">
-                <div class="section">
-                    <h3>Primary Muscles</h3>
-                    <p><span class="primary-muscles">Glutes and Quads</span> (front leg), <span class="primary-muscles">Glute Medius</span> (stability)</p>
-                </div>
-                
-                <div class="section">
-                    <h3>Equipment</h3>
-                    <ul>
-                        <li>Sturdy chair/bench/sofa</li>
-                        <li>Optional: Loop resistance band</li>
-                    </ul>
-                </div>
-                
-                <div class="section">
-                    <h3>Setup</h3>
-                    <ul>
-                        <li>Stand 2-3 feet in front of chair, facing away</li>
-                        <li>Place top of one foot on chair edge</li>
-                        <li>Position front foot for knee over ankle when lowering</li>
-                        <li>Optional: Step on middle of band with front foot and hold ends at shoulders</li>
-                    </ul>
-                </div>
-                
-                <div class="section">
-                    <h3>Execution</h3>
-                    <div class="execution-step" data-number="1">
-                        Lower body straight down by bending front knee
-                    </div>
-                    <div class="execution-step" data-number="2">
-                        Descend until front thigh is roughly parallel to floor
-                    </div>
-                    <div class="execution-step" data-number="3">
-                        Keep torso stable, core tight
-                    </div>
-                    <div class="execution-step" data-number="4">
-                        <strong>Drive through front foot</strong> to stand up
-                    </div>
-                    <div class="execution-step" data-number="5">
-                        Complete all reps on one leg before switching
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <h3>Key Form Cues</h3>
-                    <div class="do-dont">
-                        <div class="do">
-                            <h4>DO</h4>
-                            <ul>
-                                <li>Lower straight down</li>
-                                <li>Keep front knee tracking over foot</li>
-                                <li>Drive through front foot</li>
-                                <li>Keep core braced</li>
-                                <li>Slight forward lean for more glutes</li>
-                            </ul>
-                        </div>
-                        <div class="dont">
-                            <h4>DON'T</h4>
-                            <ul>
-                                <li>Let knee collapse inward</li>
-                                <li>Bounce at bottom</li>
-                                <li>Lean excessively</li>
-                                <li>Push off back foot too much</li>
-                            </ul>
+                    
+                    <div class="section">
+                        <h3>Key Form Cues</h3>
+                        <div class="do-dont">
+                            <div class="do">
+                                <h4>DO</h4>
+                                <ul>
+                                    <li>Drive through heels</li>
+                                    <li>Keep chin tucked</li>
+                                    <li>Squeeze glutes HARD at top</li>
+                                    <li>Control descent</li>
+                                    <li>Keep knees tracking over feet</li>
+                                </ul>
+                            </div>
+                            <div class="dont">
+                                <h4>DON'T</h4>
+                                <ul>
+                                    <li>Push through toes</li>
+                                    <li>Arch lower back</li>
+                                    <li>Look up at ceiling</li>
+                                    <li>Let knees cave inward</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="feel-it">
-                    <h4>Feel It</h4>
-                    <p>Strong work in quad and glute of front leg, side glute for stability</p>
+                    
+                    <div class="feel-it">
+                        <h4>Feel It</h4>
+                        <p>Intense contraction in glutes at top. If using knee band, also in outer glutes.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Exercise 4 -->
-        <div class="exercise" id="exercise-4">
-            <div class="exercise-header" onclick="toggleExercise(this.parentNode)">
-                <h2>4. Banded Hip Abduction (Standing)</h2>
-                <span class="arrow">▼</span>
-            </div>
-            <div class="exercise-content">
-                <div class="section">
-                    <h3>Primary Muscles</h3>
-                    <p><span class="primary-muscles">Gluteus Medius and Minimus</span> (Side/Upper Glutes)</p>
+            
+            <!-- Exercise 2 -->
+            <div class="exercise" id="exercise-2">
+                <div class="exercise-header" onclick="toggleExercise(this.parentNode)">
+                    <h2>2. Banded Romanian Deadlift (RDL)</h2>
+                    <span class="arrow">▼</span>
                 </div>
-                
-                <div class="section">
-                    <h3>Equipment</h3>
-                    <ul>
-                        <li>Loop resistance band</li>
-                    </ul>
-                </div>
-                
-                <div class="section">
-                    <h3>Setup</h3>
-                    <ul>
-                        <li>Place band around legs: ankles (harder) or above knees (easier)</li>
-                        <li>Stand feet hip-width apart with slight band tension</li>
-                        <li>Slight athletic stance with soft knees</li>
-                        <li>Optional: Hold wall/chair for balance</li>
-                    </ul>
-                </div>
-                
-                <div class="section">
-                    <h3>Execution</h3>
-                    <div class="execution-step" data-number="1">
-                        Shift weight onto one leg (keep knee slightly bent)
+                <div class="exercise-content">
+                    <div class="section">
+                        <h3>Primary Muscles</h3>
+                        <p><span class="primary-muscles">Hamstrings and Glutes</span></p>
                     </div>
-                    <div class="execution-step" data-number="2">
-                        Lift other leg out to side, leading with heel
+                    
+                    <div class="section">
+                        <h3>Equipment</h3>
+                        <ul>
+                            <li>Loop resistance band</li>
+                        </ul>
                     </div>
-                    <div class="execution-step" data-number="3">
-                        Keep torso upright (no leaning sideways)
+                    
+                    <div class="section">
+                        <h3>Setup</h3>
+                        <ul>
+                            <li>Stand with feet hip-width apart on middle of resistance band</li>
+                            <li>Hold the ends of the band in each hand</li>
+                            <li>Stand tall, chest up, shoulders back</li>
+                            <li>Slight bend in knees - <strong>maintain this bend throughout</strong></li>
+                        </ul>
                     </div>
-                    <div class="execution-step" data-number="4">
-                        <strong>Squeeze outer/upper glute</strong> of moving leg
-                    </div>
-                    <div class="execution-step" data-number="5">
-                        Control leg back, maintaining band tension
-                    </div>
-                    <div class="execution-step" data-number="6">
-                        Complete all reps on one side before switching
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <h3>Key Form Cues</h3>
-                    <div class="do-dont">
-                        <div class="do">
-                            <h4>DO</h4>
-                            <ul>
-                                <li>Keep torso upright</li>
-                                <li>Control movement out and in</li>
-                                <li>Lead with heel</li>
-                                <li>Squeeze side/upper glute</li>
-                                <li>Keep core braced</li>
-                            </ul>
+                    
+                    <div class="section">
+                        <h3>Execution</h3>
+                        <div class="execution-step" data-number="1">
+                            <strong>Push hips back</strong> (hinge, don't squat)
                         </div>
-                        <div class="dont">
-                            <h4>DON'T</h4>
-                            <ul>
-                                <li>Lean torso sideways</li>
-                                <li>Swing the leg</li>
-                                <li>Point toes up</li>
-                                <li>Let band snap leg back</li>
-                            </ul>
+                        <div class="execution-step" data-number="2">
+                            Let hands lower straight down, keeping tension on the band
+                        </div>
+                        <div class="execution-step" data-number="3">
+                            Keep back flat the entire time
+                        </div>
+                        <div class="execution-step" data-number="4">
+                            Lower until you feel hamstring stretch
+                        </div>
+                        <div class="execution-step" data-number="5">
+                            <strong>Drive hips forward</strong> to stand up against band resistance
+                        </div>
+                        <div class="execution-step" data-number="6">
+                            <strong>Squeeze glutes</strong> at the top
+                        </div>
+                        <div class="execution-step" data-number="7">
+                            Repeat. Inhale down, exhale up
                         </div>
                     </div>
-                </div>
-                
-                <div class="feel-it">
-                    <h4>Feel It</h4>
-                    <p>Burn in side/upper glutes of moving leg, standing leg glute works for stability</p>
+                    
+                    <div class="section">
+                        <h3>Key Form Cues</h3>
+                        <div class="do-dont">
+                            <div class="do">
+                                <h4>DO</h4>
+                                <ul>
+                                    <li>Hinge at hips</li>
+                                    <li>Keep back flat</li>
+                                    <li>Keep hands close to legs</li>
+                                    <li>Feel hamstring stretch</li>
+                                    <li>Drive hips forward</li>
+                                    <li>Maintain soft knees</li>
+                                </ul>
+                            </div>
+                            <div class="dont">
+                                <h4>DON'T</h4>
+                                <ul>
+                                    <li>Round lower back</li>
+                                    <li>Let hands drift forward</li>
+                                    <li>Squat by bending knees more</li>
+                                    <li>Lose tension in the band</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="feel-it">
+                        <h4>Feel It</h4>
+                        <p>Hamstring stretch going down, strong hamstrings and glutes coming up</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="section">
-            <h3>Remember</h3>
-            <p>Start with lighter resistance bands that allow perfect form. Focus on mind-muscle connection. Consistently apply <strong>progressive overload</strong> by gradually increasing band strength or reps/sets over time for growth.</p>
+            
+            <!-- Exercise 3 -->
+            <div class="exercise" id="exercise-3">
+                <div class="exercise-header" onclick="toggleExercise(this.parentNode)">
+                    <h2>3. Bodyweight Bulgarian Split Squat</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <div class="section">
+                        <h3>Primary Muscles</h3>
+                        <p><span class="primary-muscles">Glutes and Quads</span> (front leg), <span class="primary-muscles">Glute Medius</span> (stability)</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Equipment</h3>
+                        <ul>
+                            <li>Sturdy chair/bench/sofa</li>
+                            <li>Optional: Loop resistance band</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Setup</h3>
+                        <ul>
+                            <li>Stand 2-3 feet in front of chair, facing away</li>
+                            <li>Place top of one foot on chair edge</li>
+                            <li>Position front foot for knee over ankle when lowering</li>
+                            <li>Optional: Step on middle of band with front foot and hold ends at shoulders</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Execution</h3>
+                        <div class="execution-step" data-number="1">
+                            Lower body straight down by bending front knee
+                        </div>
+                        <div class="execution-step" data-number="2">
+                            Descend until front thigh is roughly parallel to floor
+                        </div>
+                        <div class="execution-step" data-number="3">
+                            Keep torso stable, core tight
+                        </div>
+                        <div class="execution-step" data-number="4">
+                            <strong>Drive through front foot</strong> to stand up
+                        </div>
+                        <div class="execution-step" data-number="5">
+                            Complete all reps on one leg before switching
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Key Form Cues</h3>
+                        <div class="do-dont">
+                            <div class="do">
+                                <h4>DO</h4>
+                                <ul>
+                                    <li>Lower straight down</li>
+                                    <li>Keep front knee tracking over foot</li>
+                                    <li>Drive through front foot</li>
+                                    <li>Keep core braced</li>
+                                    <li>Slight forward lean for more glutes</li>
+                                </ul>
+                            </div>
+                            <div class="dont">
+                                <h4>DON'T</h4>
+                                <ul>
+                                    <li>Let knee collapse inward</li>
+                                    <li>Bounce at bottom</li>
+                                    <li>Lean excessively</li>
+                                    <li>Push off back foot too much</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="feel-it">
+                        <h4>Feel It</h4>
+                        <p>Strong work in quad and glute of front leg, side glute for stability</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Exercise 4 -->
+            <div class="exercise" id="exercise-4">
+                <div class="exercise-header" onclick="toggleExercise(this.parentNode)">
+                    <h2>4. Banded Hip Abduction (Standing)</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <div class="section">
+                        <h3>Primary Muscles</h3>
+                        <p><span class="primary-muscles">Gluteus Medius and Minimus</span> (Side/Upper Glutes)</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Equipment</h3>
+                        <ul>
+                            <li>Loop resistance band</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Setup</h3>
+                        <ul>
+                            <li>Place band around legs: ankles (harder) or above knees (easier)</li>
+                            <li>Stand feet hip-width apart with slight band tension</li>
+                            <li>Slight athletic stance with soft knees</li>
+                            <li>Optional: Hold wall/chair for balance</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Execution</h3>
+                        <div class="execution-step" data-number="1">
+                            Shift weight onto one leg (keep knee slightly bent)
+                        </div>
+                        <div class="execution-step" data-number="2">
+                            Lift other leg out to side, leading with heel
+                        </div>
+                        <div class="execution-step" data-number="3">
+                            Keep torso upright (no leaning sideways)
+                        </div>
+                        <div class="execution-step" data-number="4">
+                            <strong>Squeeze outer/upper glute</strong> of moving leg
+                        </div>
+                        <div class="execution-step" data-number="5">
+                            Control leg back, maintaining band tension
+                        </div>
+                        <div class="execution-step" data-number="6">
+                            Complete all reps on one side before switching
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Key Form Cues</h3>
+                        <div class="do-dont">
+                            <div class="do">
+                                <h4>DO</h4>
+                                <ul>
+                                    <li>Keep torso upright</li>
+                                    <li>Control movement out and in</li>
+                                    <li>Lead with heel</li>
+                                    <li>Squeeze side/upper glute</li>
+                                    <li>Keep core braced</li>
+                                </ul>
+                            </div>
+                            <div class="dont">
+                                <h4>DON'T</h4>
+                                <ul>
+                                    <li>Lean torso sideways</li>
+                                    <li>Swing the leg</li>
+                                    <li>Point toes up</li>
+                                    <li>Let band snap leg back</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="feel-it">
+                        <h4>Feel It</h4>
+                        <p>Burn in side/upper glutes of moving leg, standing leg glute works for stability</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>Remember</h3>
+                <p>Start with lighter resistance bands that allow perfect form. Focus on mind-muscle connection. Consistently apply <strong>progressive overload</strong> by gradually increasing band strength or reps/sets over time for growth.</p>
+            </div>
         </div>
     </div>
     
     <script>
+        // Authentication logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const correctCode = "Georgie";
+            const authOverlay = document.getElementById('auth-overlay');
+            const contentContainer = document.getElementById('content-container');
+            const accessCodeInput = document.getElementById('access-code');
+            const submitButton = document.getElementById('submit-code');
+            const authError = document.getElementById('auth-error');
+            
+            // Submit button click
+            submitButton.addEventListener('click', checkCode);
+            
+            // Also allow Enter key to submit
+            accessCodeInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    checkCode();
+                }
+            });
+            
+            function checkCode() {
+                if (accessCodeInput.value === correctCode) {
+                    showContent();
+                } else {
+                    authError.style.display = 'block';
+                    accessCodeInput.value = '';
+                }
+            }
+            
+            function showContent() {
+                authOverlay.style.display = 'none';
+                contentContainer.style.display = 'block';
+                // Initialize the workout content
+                openExercise(0);
+            }
+        });
+        
+        // Workout content logic
         function toggleExercise(element) {
             element.classList.toggle('active');
         }
@@ -611,11 +730,6 @@
             // Scroll to the exercise
             exercises[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        
-        // Open the first exercise by default
-        document.addEventListener('DOMContentLoaded', function() {
-            openExercise(0);
-        });
     </script>
 </body>
 </html>
